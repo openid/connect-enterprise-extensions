@@ -52,7 +52,7 @@ jobs:
 
       - name: Convert Markdown to RFC XML with MMark
         run: |
-          mmark openid-provider-commands-1_0.md > openid-provider-commands-1_0.xml
+          mmark openid-connect-enterprise-extensions-1_0.md > openid-connect-enterprise-extensions-1_0.xml
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -76,7 +76,7 @@ jobs:
 
 
       - name: Render HTML
-        run: xml2rfc --html openid-provider-commands-1_0.xml --out html/$BRANCH_NAME.html
+        run: xml2rfc --html openid-connect-enterprise-extensions-1_0.xml --out html/$BRANCH_NAME.html
 
       - name: Deploy to GitHub Pages
         if: success()

@@ -14,7 +14,7 @@ The latest released draft of the specification is available at [https://openid.n
 
 ## Builds
 
-You can view the latest editors' draft at [https://openid.github.io/openid-connect-enterprise-extensions/main.html](https://openid.github.io/openid-connect-enterprise-extensions/main.html).
+You can view the latest editors' draft at [https://openid.github.io/connect-enterprise-extensions/main.html](https://openid.github.io/connect-enterprise-extensions/main.html).
 
 Previews for each branch of this project are automatically built and published at the URL https://openid.github.io/openid-connect-enterprise-extensions/$branchname.html.
 Previews for branches associated with pending Pull Requests are accessible using this pattern.

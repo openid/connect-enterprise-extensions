@@ -83,9 +83,6 @@ The `session_expiry` claim is a JSON integer that represents the Unix timestamp 
 
 The `tenant` claim is an opaque JSON string that represents a tenant identifier and MAY have the value `personal`, `organization` or a stable OP unique value for multi-tenant OPs. The `personal` value is reserved for when Accounts are managed by individuals. The `organization` value is reserved for Accounts managed by an organization.
 
-## aud_sub
-
-The `aud_sub` claim is a JSON string that represents an identifier the Relying Party (RP) has for a user. How the OpenID Provider (OP) received this identifier from the RP is out of scope for this specification.
 
 # Authentication Request Parameters
 
@@ -140,8 +137,8 @@ The `tenant` value to be included in the Authentication Request.
 
 ## Normative References
 
-- **[RFC2119]** Bradner, S. "Key words for use in RFCs to Indicate Requirement Levels," *RFC 2119*, March 1997.
-- **[OpenID Connect Core 1.0]** – "OpenID Connect Core 1.0 incorporating errata set 1," available at <https://openid.net/specs/openid-connect-core-1_0.html>. 
+- **[RFC2119]** Bradner, S. “Key words for use in RFCs to Indicate Requirement Levels,” *RFC 2119*, March 1997.
+- **[OpenID Connect Core 1.0]** – “OpenID Connect Core 1.0 incorporating errata set 1,” available at <https://openid.net/specs/openid-connect-core-1_0.html>. 
 
 ## Informative References
 

@@ -1,5 +1,5 @@
 %%%
-title = "OpenID Connect Enterprise Extensions 1.0 - draft 00"
+title = "OpenID Connect Enterprise Extensions 1.0 - draft 01"
 abbrev = "openid-connect-enterprise-extensions"
 ipr = "none"
 workgroup = "OpenID Connect"
@@ -202,3 +202,7 @@ specification.
    -00
 
    initial draft
+
+   -01
+
+   * added `aud_sub` claim

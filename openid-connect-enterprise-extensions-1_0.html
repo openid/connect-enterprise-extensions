@@ -2057,7 +2057,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
         </table>
 <ul class="compact">
 <li class="compact" id="appendix-A.1-8.1">
-            <strong>Discovery</strong>: If an OP publishes support for the <code>tenant</code> claim in the <code>claims_supported</code> metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the <code>tenant</code> claim to be present in ID Tokens. The <code>tenant</code> claim value MUST be one of the allowed values for the corresponding OP model as specified in the table in <a href="#tenant">Section "tenant"</a>.<a href="#appendix-A.1-8.1" class="pilcrow">¶</a>
+            <strong>Discovery</strong>: If an OP publishes support for the <code>tenant</code> claim in the <code>claims_supported</code> metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the <code>tenant</code> claim to be present in ID Tokens with a value of <code>personal</code> or a unique tenant identifier, as specified in <a href="#tenant">Section "tenant"</a>.<a href="#appendix-A.1-8.1" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>

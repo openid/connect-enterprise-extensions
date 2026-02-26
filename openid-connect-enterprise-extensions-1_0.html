@@ -1484,52 +1484,74 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
 <a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-tenant" class="section-name selfRef">tenant</a>
         </h3>
 <p id="section-2.2-1">The <code>tenant</code> claim is a JSON string that represents an OP tenant identifier. This claim is OPTIONAL and MAY be included in ID Tokens.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-2">The following well-known values are defined for the <code>tenant</code> claim:<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.2-2.1">
-            <p id="section-2.2-2.1.1"><strong>Single-tenant OPs</strong>: Single-tenant OPs SHOULD omit the <code>tenant</code> claim.<a href="#section-2.2-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2-3.1">
+            <code>personal</code>: Indicates that accounts are managed by individuals rather than by a specific organizational tenant.<a href="#section-2.2-3.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-2.2-2.2">
-            <p id="section-2.2-2.2.1"><strong>Multi-tenant OPs using a single issuer</strong>: Multi-tenant OPs using a single issuer identifier SHOULD include the <code>tenant</code> claim to identify the OP tenant. The value MUST be a stable, opaque to the RP, OP unique identifier or a well known special value described below.<a href="#section-2.2-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.2-3.2">
+            <p id="section-2.2-3.2.1"><code>organization</code>: Indicates that accounts are managed by an organization.<a href="#section-2.2-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.2-3.3">
+            <p id="section-2.2-3.3.1"><strong>Single-tenant OPs</strong>: Single-tenant OPs MAY include the <code>tenant</code> claim. If included, the value MUST be <code>personal</code> or <code>organization</code>.<a href="#section-2.2-3.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.2-3.4">
+            <p id="section-2.2-3.4.1"><strong>Multi-tenant OPs using a single issuer</strong>: Multi-tenant OPs using a single issuer identifier SHOULD include the <code>tenant</code> claim to identify the OP tenant. The value MUST be <code>personal</code> or a stable, opaque to the RP, OP unique tenant identifier.<a href="#section-2.2-3.4.1" class="pilcrow">¶</a></p>
 <ul class="compact normal">
-<li class="compact normal" id="section-2.2-2.2.2.1">The combination of <code>iss</code>, <code>tenant</code>, and <code>sub</code> MUST be unique across all OP tenants.<a href="#section-2.2-2.2.2.1" class="pilcrow">¶</a>
+<li class="compact normal" id="section-2.2-3.4.2.1">The combination of <code>iss</code>, <code>tenant</code>, and <code>sub</code> MUST be unique across all OP tenants.<a href="#section-2.2-3.4.2.1" class="pilcrow">¶</a>
 </li>
-              <li class="compact normal" id="section-2.2-2.2.2.2">If the OP uses <code>pairwise</code> subject identifiers, the same user MAY have the same <code>sub</code> for the same <code>client_id</code> regardless of OP tenant. The <code>tenant</code> claim SHOULD be included in the uniqueness requirement (<code>iss</code> + <code>tenant</code> + <code>sub</code>) to disambiguate subjects across tenants.<a href="#section-2.2-2.2.2.2" class="pilcrow">¶</a>
+              <li class="compact normal" id="section-2.2-3.4.2.2">If the OP uses <code>pairwise</code> subject identifiers, the same user MAY have the same <code>sub</code> for the same <code>client_id</code> regardless of OP tenant. The <code>tenant</code> claim SHOULD be included in the uniqueness requirement (<code>iss</code> + <code>tenant</code> + <code>sub</code>) to disambiguate subjects across tenants.<a href="#section-2.2-3.4.2.2" class="pilcrow">¶</a>
 </li>
-              <li class="compact normal" id="section-2.2-2.2.2.3">If the OP uses <code>public</code> subject identifiers, the <code>sub</code> value MUST be the same across all RPs/clients and all OP tenants. The <code>tenant</code> claim MUST be included in the uniqueness requirement (<code>iss</code> + <code>tenant</code> + <code>sub</code>) to disambiguate subjects across tenants.<a href="#section-2.2-2.2.2.3" class="pilcrow">¶</a>
+              <li class="compact normal" id="section-2.2-3.4.2.3">If the OP uses <code>public</code> subject identifiers, the <code>sub</code> value MUST be the same across all RPs/clients and all OP tenants. The <code>tenant</code> claim MUST be included in the uniqueness requirement (<code>iss</code> + <code>tenant</code> + <code>sub</code>) to disambiguate subjects across tenants.<a href="#section-2.2-3.4.2.3" class="pilcrow">¶</a>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-2.2-2.3">
-            <p id="section-2.2-2.3.1"><strong>Multi-tenant OPs using tenant-specific issuer identifiers</strong>: Multi-tenant OPs using tenant-specific issuer identifiers SHOULD omit the <code>tenant</code> claim since the issuer identifier itself identifies the tenant.<a href="#section-2.2-2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.2-3.5">
+            <p id="section-2.2-3.5.1"><strong>Multi-tenant OPs using tenant-specific issuer identifiers</strong>: Multi-tenant OPs using tenant-specific issuer identifiers SHOULD omit the <code>tenant</code> claim since the issuer identifier itself identifies the tenant. If the <code>tenant</code> claim is included, the value MUST be <code>personal</code> or <code>organization</code>.<a href="#section-2.2-3.5.1" class="pilcrow">¶</a></p>
 <ul class="compact normal">
-<li class="compact normal" id="section-2.2-2.3.2.1">Each tenant issuer identifier MUST be a valid URL per [OpenID Connect Core 1.0] Section 2.<a href="#section-2.2-2.3.2.1" class="pilcrow">¶</a>
+<li class="compact normal" id="section-2.2-3.5.2.1">Each tenant issuer identifier MUST be a valid URL per [OpenID Connect Core 1.0] Section 2.<a href="#section-2.2-3.5.2.1" class="pilcrow">¶</a>
 </li>
-              <li class="compact normal" id="section-2.2-2.3.2.2">The combination of <code>iss</code> and <code>sub</code> MUST be unique per tenant.<a href="#section-2.2-2.3.2.2" class="pilcrow">¶</a>
+              <li class="compact normal" id="section-2.2-3.5.2.2">The combination of <code>iss</code> and <code>sub</code> MUST be unique per tenant.<a href="#section-2.2-3.5.2.2" class="pilcrow">¶</a>
 </li>
-              <li class="compact normal" id="section-2.2-2.3.2.3">If the OP uses <code>pairwise</code> subject identifiers, the <code>sub</code> value MUST differ across <code>client_id</code> values within each tenant. The combination of <code>iss</code> + <code>client_id</code> + <code>sub</code> MUST be unique across all tenants.<a href="#section-2.2-2.3.2.3" class="pilcrow">¶</a>
+              <li class="compact normal" id="section-2.2-3.5.2.3">If the OP uses <code>pairwise</code> subject identifiers, the <code>sub</code> value MUST differ across <code>client_id</code> values within each tenant. The combination of <code>iss</code> + <code>client_id</code> + <code>sub</code> MUST be unique across all tenants.<a href="#section-2.2-3.5.2.3" class="pilcrow">¶</a>
 </li>
-              <li class="compact normal" id="section-2.2-2.3.2.4">If the OP uses <code>public</code> subject identifiers, the <code>sub</code> value MUST be the same across all RPs/clients within each tenant. The <code>sub</code> value MAY be the same across tenants, but the combination of <code>iss</code> + <code>sub</code> MUST be unique across all tenants.<a href="#section-2.2-2.3.2.4" class="pilcrow">¶</a>
+              <li class="compact normal" id="section-2.2-3.5.2.4">If the OP uses <code>public</code> subject identifiers, the <code>sub</code> value MUST be the same across all RPs/clients within each tenant. The <code>sub</code> value MAY be the same across tenants, but the combination of <code>iss</code> + <code>sub</code> MUST be unique across all tenants.<a href="#section-2.2-3.5.2.4" class="pilcrow">¶</a>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-2.2-2.4">
-            <p id="section-2.2-2.4.1"><strong>Special values</strong>: The <code>tenant</code> claim MAY have the well-known value <code>personal</code> or <code>organization</code> instead of a unique identifier.<a href="#section-2.2-2.4.1" class="pilcrow">¶</a></p>
-<ul class="compact normal">
-<li class="compact normal" id="section-2.2-2.4.2.1">
-                <code>personal</code>: Indicates that accounts are managed by individuals rather than by a specific organizational tenant.<a href="#section-2.2-2.4.2.1" class="pilcrow">¶</a>
-</li>
-              <li class="compact normal" id="section-2.2-2.4.2.2">
-                <code>organization</code>: Indicates that accounts are managed by an organization.<a href="#section-2.2-2.4.2.2" class="pilcrow">¶</a>
-</li>
-            </ul>
+          <li class="normal" id="section-2.2-3.6">
+            <p id="section-2.2-3.6.1"><strong>Discovery</strong>: If an OP publishes support for the <code>tenant</code> claim in the <code>claims_supported</code> metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the <code>tenant</code> claim to be present in ID Tokens. The <code>tenant</code> claim value MUST be one of the allowed values for the corresponding OP model as specified in the table below.<a href="#section-2.2-3.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-2.2-3">For multi-tenant OPs using tenant-specific issuer identifiers, if the <code>tenant</code> claim is present and does not match the tenant identified by the <code>iss</code> value, the RP SHOULD treat this as an error condition.<a href="#section-2.2-3" class="pilcrow">¶</a></p>
-<ul class="compact">
-<li class="compact" id="section-2.2-4.1">
-            <strong>Discovery</strong>: If an OP publishes support for the <code>tenant</code> claim in the <code>claims_supported</code> metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer supports multiple tenants and SHOULD expect the <code>tenant</code> claim to be present in ID Tokens.<a href="#section-2.2-4.1" class="pilcrow">¶</a>
-</li>
-        </ul>
+<p id="section-2.2-4">The following table summarizes the <code>tenant</code> claim rules by OP model:<a href="#section-2.2-4" class="pilcrow">¶</a></p>
+<table class="center" id="table-1">
+          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">OP Model</th>
+              <th class="text-left" rowspan="1" colspan="1">Allowed Values</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Single-tenant</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>personal</code> or <code>organization</code>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Multi-tenant (single issuer)</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>personal</code> or unique tenant identifier</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Multi-tenant (tenant-specific issuers)</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>personal</code> or <code>organization</code>
+</td>
+            </tr>
+          </tbody>
+        </table>
 </section>
 </div>
 <div id="aud-sub">
@@ -1547,7 +1569,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
         <h3 id="name-aud_tenant">
 <a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-aud_tenant" class="section-name selfRef">aud_tenant</a>
         </h3>
-<p id="section-2.4-1">The <code>aud_tenant</code> claim is a JSON string that represents an RP tenant identifier. This claim is OPTIONAL and is only included when the RP is multi-tenant and the OP knows the RP tenant identifier (see Appendix A for how the RP communicates its tenant identifier to the OP).<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4-1">The <code>aud_tenant</code> claim is a JSON string that represents an RP tenant identifier. This claim is OPTIONAL and is only included when the RP is multi-tenant and the OP knows the RP tenant identifier (see <a href="#enterprise-tenancy-models">Appendix A</a> for how the RP communicates its tenant identifier to the OP).<a href="#section-2.4-1" class="pilcrow">¶</a></p>
 <p id="section-2.4-2">When the RP provides the <code>client_tenant</code> authentication request parameter, the <code>aud_tenant</code> claim value MUST be the same value that the RP provided in that parameter. When the OP determines the RP tenant identifier through other means (e.g., <code>domain_hint</code>, <code>login_hint</code>, default tenant selection, or end-user selection), the <code>aud_tenant</code> claim value MUST be a valid RP tenant identifier for the client. The value is opaque to the OP (the OP does not need to understand its semantic meaning). The value MUST be a stable identifier that is unique within the context of the <code>client_id</code> used in the authentication request, ensuring that when multiple RP tenants share the same <code>client_id</code>, each tenant can be uniquely identified.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
 <p id="section-2.4-3">When <code>aud_tenant</code> is present, the <code>aud_sub</code> claim represents the identifier the RP has for the account within the context of that specific RP tenant. The combination of <code>aud</code> + <code>aud_tenant</code> and <code>aud_sub</code> MUST be unique within the RP.<a href="#section-2.4-3" class="pilcrow">¶</a></p>
 </section>
@@ -1575,11 +1597,16 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-tenant-2" class="section-name selfRef">tenant</a>
         </h3>
 <p id="section-3.2-1">The <code>tenant</code> parameter is the explicit OP tenant identifier value that corresponds to the <code>tenant</code> claim the RP would like included in the ID Token. This parameter takes precedence over <code>domain_hint</code> when both are present.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">The <code>tenant</code> parameter value MUST match one of the following:
-- The value <code>personal</code> to indicate the RP would like the user to use an account managed by the user (personal account)
-- The value <code>organization</code> to indicate the RP would like the user to use an account managed by an organization (organizational account)
-- A stable, opaque OP tenant identifier value for multi-tenant OPs<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">If the <code>tenant</code> parameter value does not match any OP tenant, the OP SHOULD return an <code>invalid_request</code> error or proceed with the authentication using the OP's default tenant selection logic. The specific behavior is implementation-dependent.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">The <code>tenant</code> parameter value MUST be one of the allowed values for the OP model as specified in the table in <a href="#tenant">Section "tenant"</a>:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-3.2-3.1">The value <code>personal</code> to indicate the RP would like the user to use a personal account (valid for all OP models)<a href="#section-3.2-3.1" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-3.2-3.2">The value <code>organization</code> to indicate the RP would like the user to use an organizational account (valid for single-tenant OPs and multi-tenant OPs using tenant-specific issuers only)<a href="#section-3.2-3.2" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-3.2-3.3">A stable, opaque OP tenant identifier (valid for multi-tenant OPs using a single issuer only)<a href="#section-3.2-3.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-3.2-4">If the <code>tenant</code> parameter value does not match any OP tenant, the OP SHOULD return an <code>invalid_request</code> error or proceed with the authentication using the OP's default tenant selection logic. The specific behavior is implementation-dependent.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="client-tenant">
@@ -1587,7 +1614,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
         <h3 id="name-client_tenant">
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-client_tenant" class="section-name selfRef">client_tenant</a>
         </h3>
-<p id="section-3.3-1">The <code>client_tenant</code> parameter is an OPTIONAL parameter that the RP includes to communicate its RP tenant identifier to the OP. This parameter is used when the RP is multi-tenant and uses a shared <code>client_id</code> across multiple RP tenants (see Appendix A for details on multi-tenant RP models).<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-1">The <code>client_tenant</code> parameter is an OPTIONAL parameter that the RP includes to communicate its RP tenant identifier to the OP. This parameter is used when the RP is multi-tenant and uses a shared <code>client_id</code> across multiple RP tenants (see <a href="#enterprise-tenancy-models">Appendix A</a> for details on multi-tenant RP models).<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.3-2">The client MAY register allowed tenants using the <code>tenants</code> client registration parameter. When the <code>client_tenant</code> authentication request parameter is provided, the OP SHOULD validate that the <code>client_tenant</code> value corresponds to a valid RP tenant identifier that was registered for this client.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
 <p id="section-3.3-3">The <code>client_tenant</code> parameter value MUST be a stable identifier that is unique within the context of the <code>client_id</code> used in the authentication request, ensuring that when multiple RP tenants share the same <code>client_id</code>, each tenant can be uniquely identified. The value is opaque to the OP (the OP does not need to understand its semantic meaning) and MUST be echoed back in the <code>aud_tenant</code> claim.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <p id="section-3.3-4">The OP MUST treat the <code>redirect_uri</code> as opaque and MUST NOT attempt to identify an RP tenant from a specific URL endpoint or pattern.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
@@ -1688,7 +1715,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
           <h4 id="name-tenant-isolation">
 <a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-tenant-isolation" class="section-name selfRef">Tenant Isolation</a>
           </h4>
-<p id="section-6.1.1-1">OPs MUST ensure strict isolation between tenants. An authenticated user from one OP tenant MUST NOT be able to obtain tokens containing a different tenant's identifier. The OP MUST validate that the <code>tenant</code> claim (see Section "ID Token Claims") in issued ID Tokens accurately reflects the tenant context in which the user authenticated.<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-1">OPs MUST ensure strict isolation between tenants. An authenticated user from one OP tenant MUST NOT be able to obtain tokens containing a different tenant's identifier. The OP MUST validate that the <code>tenant</code> claim (see <a href="#id-token-claims">Section "ID Token Claims"</a>) in issued ID Tokens accurately reflects the tenant context in which the user authenticated.<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="client-tenant-validation">
@@ -1696,7 +1723,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
           <h4 id="name-client-tenant-validation">
 <a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-client-tenant-validation" class="section-name selfRef">Client Tenant Validation</a>
           </h4>
-<p id="section-6.1.2-1">When the OP receives a <code>client_tenant</code> authentication request parameter (see Section "Authentication Request Parameters"), the OP SHOULD validate that the value corresponds to a registered RP tenant identifier for the given <code>client_id</code>. If the OP has registered the <code>tenants</code> client registration parameter (see Section "Client Registration Parameters") for the client, the OP SHOULD reject requests where <code>client_tenant</code> is not in the registered list.<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-1">When the OP receives a <code>client_tenant</code> authentication request parameter (see <a href="#authentication-request-parameters">Section "Authentication Request Parameters"</a>), the OP SHOULD validate that the value corresponds to a registered RP tenant identifier for the given <code>client_id</code>. If the OP has registered the <code>tenants</code> client registration parameter (see <a href="#client-registration-parameters">Section "Client Registration Parameters"</a>) for the client, the OP SHOULD reject requests where <code>client_tenant</code> is not in the registered list.<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.2-2">Failure to validate the <code>client_tenant</code> parameter could allow an attacker to request tokens for arbitrary RP tenants, potentially bypassing RP tenant-specific policies configured at the OP.<a href="#section-6.1.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1706,8 +1733,8 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
 <a href="#section-6.1.3" class="section-number selfRef">6.1.3. </a><a href="#name-subject-identifier-collisio" class="section-name selfRef">Subject Identifier Collision</a>
           </h4>
 <p id="section-6.1.3-1">Multi-tenant OPs MUST ensure that subject identifiers are unambiguous across tenants to prevent account confusion where an RP incorrectly links accounts from different OP tenants.<a href="#section-6.1.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.1.3-2">For multi-tenant OPs using a single issuer (see Appendix A), the OP MUST ensure that subject identifiers are unambiguous across tenants. If the same <code>sub</code> value could exist in multiple OP tenants, the OP MUST include the <code>tenant</code> claim (see Section "ID Token Claims") in the ID Token to enable RPs to correctly identify the account. The combination of <code>iss</code> + <code>tenant</code> + <code>sub</code> (for public subject identifiers) or <code>iss</code> + <code>tenant</code> + <code>client_id</code> + <code>sub</code> (for pairwise subject identifiers) MUST be unique across all tenants (see Appendix A for detailed requirements).<a href="#section-6.1.3-2" class="pilcrow">¶</a></p>
-<p id="section-6.1.3-3">For multi-tenant OPs using tenant-specific issuer identifiers (see Appendix A), the OP MUST ensure that the combination of <code>iss</code> + <code>sub</code> (for public subject identifiers) or <code>iss</code> + <code>client_id</code> + <code>sub</code> (for pairwise subject identifiers) is unique across all tenants. Since each tenant has a different issuer identifier, the OIDC Core requirement that <code>sub</code> is unique within <code>iss</code> already ensures tenant isolation. However, the OP MUST ensure uniqueness across all tenants, regardless of whether a client is shared across tenants or unique per tenant (see Appendix A for detailed requirements).<a href="#section-6.1.3-3" class="pilcrow">¶</a></p>
+<p id="section-6.1.3-2">For multi-tenant OPs using a single issuer (see <a href="#enterprise-tenancy-models">Appendix A</a>), the OP MUST ensure that subject identifiers are unambiguous across tenants. If the same <code>sub</code> value could exist in multiple OP tenants, the OP MUST include the <code>tenant</code> claim (see <a href="#id-token-claims">Section "ID Token Claims"</a>) in the ID Token to enable RPs to correctly identify the account. The combination of <code>iss</code> + <code>tenant</code> + <code>sub</code> (for public subject identifiers) or <code>iss</code> + <code>tenant</code> + <code>client_id</code> + <code>sub</code> (for pairwise subject identifiers) MUST be unique across all tenants (see <a href="#enterprise-tenancy-models">Appendix A</a> for detailed requirements).<a href="#section-6.1.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.3-3">For multi-tenant OPs using tenant-specific issuer identifiers (see <a href="#enterprise-tenancy-models">Appendix A</a>), the OP MUST ensure that the combination of <code>iss</code> + <code>sub</code> (for public subject identifiers) or <code>iss</code> + <code>client_id</code> + <code>sub</code> (for pairwise subject identifiers) is unique across all tenants. Since each tenant has a different issuer identifier, the OIDC Core requirement that <code>sub</code> is unique within <code>iss</code> already ensures tenant isolation. However, the OP MUST ensure uniqueness across all tenants, regardless of whether a client is shared across tenants or unique per tenant (see <a href="#enterprise-tenancy-models">Appendix A</a> for detailed requirements).<a href="#section-6.1.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="token-injection-prevention">
@@ -1730,7 +1757,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
           <h4 id="name-tenant-claim-validation">
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-tenant-claim-validation" class="section-name selfRef">Tenant Claim Validation</a>
           </h4>
-<p id="section-6.2.1-1">When an RP expects to receive the <code>tenant</code> claim (see Section "ID Token Claims") (e.g., when authenticating to a multi-tenant OP using a single issuer, as described in Appendix A), the RP MUST validate that the <code>tenant</code> claim is present in the ID Token. If the RP has prior knowledge of the expected tenant (e.g., from a previous authentication or configuration), the RP SHOULD validate that the received <code>tenant</code> claim matches the expected value.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-1">When an RP expects to receive the <code>tenant</code> claim (see <a href="#id-token-claims">Section "ID Token Claims"</a>) (e.g., when authenticating to a multi-tenant OP using a single issuer, as described in <a href="#enterprise-tenancy-models">Appendix A</a>), the RP MUST validate that the <code>tenant</code> claim is present in the ID Token. If the RP has prior knowledge of the expected tenant (e.g., from a previous authentication or configuration), the RP SHOULD validate that the received <code>tenant</code> claim matches the expected value.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.2.1-2">Failure to validate the <code>tenant</code> claim could result in:
 - Account confusion where users from different OP tenants are incorrectly linked
 - Privilege escalation if tenant-specific access controls are bypassed<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
@@ -1741,8 +1768,8 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
           <h4 id="name-aud_tenant-claim-validation">
 <a href="#section-6.2.2" class="section-number selfRef">6.2.2. </a><a href="#name-aud_tenant-claim-validation" class="section-name selfRef">aud_tenant Claim Validation</a>
           </h4>
-<p id="section-6.2.2-1">When an RP sends the <code>client_tenant</code> authentication request parameter (see Section "Authentication Request Parameters"), the RP MUST validate that the returned <code>aud_tenant</code> claim (see Section "ID Token Claims") matches the value sent in the request. If the <code>aud_tenant</code> claim is missing or contains a different value, the RP MUST reject the ID Token.<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.2-2">This validation prevents an attacker from obtaining a token intended for one RP tenant and using it to authenticate to a different RP tenant. See Appendix A for details on how the <code>client_tenant</code> parameter relates to the <code>aud_tenant</code> claim.<a href="#section-6.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.2-1">When an RP sends the <code>client_tenant</code> authentication request parameter (see <a href="#authentication-request-parameters">Section "Authentication Request Parameters"</a>), the RP MUST validate that the returned <code>aud_tenant</code> claim (see <a href="#id-token-claims">Section "ID Token Claims"</a>) matches the value sent in the request. If the <code>aud_tenant</code> claim is missing or contains a different value, the RP MUST reject the ID Token.<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.2-2">This validation prevents an attacker from obtaining a token intended for one RP tenant and using it to authenticate to a different RP tenant. See <a href="#enterprise-tenancy-models">Appendix A</a> for details on how the <code>client_tenant</code> parameter relates to the <code>aud_tenant</code> claim.<a href="#section-6.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="account-identifier-uniqueness">
@@ -1751,9 +1778,9 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
 <a href="#section-6.2.3" class="section-number selfRef">6.2.3. </a><a href="#name-account-identifier-uniquene" class="section-name selfRef">Account Identifier Uniqueness</a>
           </h4>
 <p id="section-6.2.3-1">RPs MUST use the complete set of identifying claims when linking accounts:
-- For multi-tenant OPs using a single issuer (see Appendix A): <code>iss</code> + <code>tenant</code> (see Section "ID Token Claims") + <code>sub</code>
-- For multi-tenant OPs using tenant-specific issuers (see Appendix A): <code>iss</code> + <code>sub</code>
-- For multi-tenant RPs with shared <code>client_id</code> (see Appendix A): <code>aud</code> + <code>aud_tenant</code> (see Section "ID Token Claims") + <code>aud_sub</code> (see Section "ID Token Claims") (when present)<a href="#section-6.2.3-1" class="pilcrow">¶</a></p>
+- For multi-tenant OPs using a single issuer (see <a href="#enterprise-tenancy-models">Appendix A</a>): <code>iss</code> + <code>tenant</code> (see <a href="#id-token-claims">Section "ID Token Claims"</a>) + <code>sub</code>
+- For multi-tenant OPs using tenant-specific issuers (see <a href="#enterprise-tenancy-models">Appendix A</a>): <code>iss</code> + <code>sub</code>
+- For multi-tenant RPs with shared <code>client_id</code> (see <a href="#enterprise-tenancy-models">Appendix A</a>): <code>aud</code> + <code>aud_tenant</code> (see <a href="#id-token-claims">Section "ID Token Claims"</a>) + <code>aud_sub</code> (see <a href="#id-token-claims">Section "ID Token Claims"</a>) (when present)<a href="#section-6.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.2.3-2">Using only a subset of these claims (e.g., only <code>sub</code>) could result in incorrectly linking accounts from different tenants.<a href="#section-6.2.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1910,7 +1937,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
             <p id="appendix-A.1-5.1.1"><strong>Multi-tenant OP</strong>: The OP has multiple tenants. Multi-tenant OPs may use a single issuer identifier for all tenants, or tenant-specific issuer identifiers:<a href="#appendix-A.1-5.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-A.1-5.1.2.1">
-                <p id="appendix-A.1-5.1.2.1.1"><strong>Single issuer for all tenants</strong>: The OP uses one issuer identifier for all tenants, and the <code>tenant</code> claim (see Section "ID Token Claims") distinguishes between tenants.<a href="#appendix-A.1-5.1.2.1.1" class="pilcrow">¶</a></p>
+                <p id="appendix-A.1-5.1.2.1.1"><strong>Single issuer for all tenants</strong>: The OP uses one issuer identifier for all tenants, and the <code>tenant</code> claim (see <a href="#id-token-claims">Section "ID Token Claims"</a>) distinguishes between tenants.<a href="#appendix-A.1-5.1.2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-A.1-5.1.2.1.2.1">
                     <p id="appendix-A.1-5.1.2.1.2.1.1"><strong>Issuer Configuration</strong>: All tenants share the same issuer identifier (<code>iss</code>), OP metadata endpoint, and signing keys.<a href="#appendix-A.1-5.1.2.1.2.1.1" class="pilcrow">¶</a></p>
@@ -1989,8 +2016,8 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
 </li>
         </ul>
 <p id="appendix-A.1-6">The following table summarizes OP tenancy models:<a href="#appendix-A.1-6" class="pilcrow">¶</a></p>
-<table class="center" id="table-1">
-          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<table class="center" id="table-2">
+          <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
 <thead>
             <tr>
               <th class="text-left" rowspan="1" colspan="1">Model</th>
@@ -2015,7 +2042,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
                 <code>public</code>: <code>iss</code> + <code>tenant</code> + <code>sub</code> unique<br>
                 <code>pairwise</code>: <code>iss</code> + <code>tenant</code> + <code>client_id</code> + <code>sub</code> unique</td>
               <td class="text-left" rowspan="1" colspan="1">
-                <code>tenant</code> claim in ID Token (see Section "ID Token Claims")</td>
+                <code>tenant</code> claim in ID Token (see <a href="#id-token-claims">Section "ID Token Claims"</a>)</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">Multi-tenant OP (tenant-specific issuers)</td>
@@ -2030,7 +2057,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
         </table>
 <ul class="compact">
 <li class="compact" id="appendix-A.1-8.1">
-            <strong>Discovery</strong>: If an OP publishes support for the <code>tenant</code> claim in the <code>claims_supported</code> metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer supports multiple tenants and SHOULD expect the <code>tenant</code> claim to be present in ID Tokens.<a href="#appendix-A.1-8.1" class="pilcrow">¶</a>
+            <strong>Discovery</strong>: If an OP publishes support for the <code>tenant</code> claim in the <code>claims_supported</code> metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the <code>tenant</code> claim to be present in ID Tokens. The <code>tenant</code> claim value MUST be one of the allowed values for the corresponding OP model as specified in the table in <a href="#tenant">Section "tenant"</a>.<a href="#appendix-A.1-8.1" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
@@ -2044,10 +2071,10 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
 <p id="appendix-A.2-2">The following applies only to multi-tenant OPs that use a single issuer for all tenants. For such OPs, the RP MAY specify which OP tenant it wants the user to authenticate to using one of the following mechanisms:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-A.2-3.1">
-            <p id="appendix-A.2-3.1.1"><strong><code>tenant</code> parameter</strong>: The RP includes the <code>tenant</code> parameter in the authentication request with the OP tenant identifier value (e.g., <code>tenant=acme-corp</code>). When the OP receives this parameter, it SHOULD include the <code>tenant</code> claim in the ID Token with the same value. This is RECOMMENDED for RPs that know which <code>tenant</code> to make an authentication request to. See Section "Authentication Request Parameters" for details.<a href="#appendix-A.2-3.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-A.2-3.1.1"><strong><code>tenant</code> parameter</strong>: The RP includes the <code>tenant</code> parameter in the authentication request with the OP tenant identifier value (e.g., <code>tenant=acme-corp</code>). When the OP receives this parameter, it SHOULD include the <code>tenant</code> claim in the ID Token with the same value. This is RECOMMENDED for RPs that know which <code>tenant</code> to make an authentication request to. See <a href="#authentication-request-parameters">Section "Authentication Request Parameters"</a> for details.<a href="#appendix-A.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-A.2-3.2">
-            <p id="appendix-A.2-3.2.1"><strong><code>domain_hint</code> parameter</strong>: The RP includes the <code>domain_hint</code> parameter with a domain name or email domain (e.g., <code>example.com</code>) that helps the OP identify the appropriate tenant. This is a user experience hint and is not guaranteed to uniquely identify a tenant. When both <code>tenant</code> and <code>domain_hint</code> are present, the <code>tenant</code> parameter takes precedence. If the OP cannot uniquely identify the tenant from <code>domain_hint</code> alone, the OP's tenant selection behavior is implementation-dependent. See Section "Authentication Request Parameters" for details.<a href="#appendix-A.2-3.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-A.2-3.2.1"><strong><code>domain_hint</code> parameter</strong>: The RP includes the <code>domain_hint</code> parameter with a domain name or email domain (e.g., <code>example.com</code>) that helps the OP identify the appropriate tenant. This is a user experience hint and is not guaranteed to uniquely identify a tenant. When both <code>tenant</code> and <code>domain_hint</code> are present, the <code>tenant</code> parameter takes precedence. If the OP cannot uniquely identify the tenant from <code>domain_hint</code> alone, the OP's tenant selection behavior is implementation-dependent. See <a href="#authentication-request-parameters">Section "Authentication Request Parameters"</a> for details.<a href="#appendix-A.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="appendix-A.2-4">When the OP tenant is not specified by the RP (neither <code>tenant</code> nor <code>domain_hint</code> is provided, or <code>domain_hint</code> does not uniquely identify a tenant), the OP MAY:
@@ -2168,7 +2195,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
                 <p id="appendix-A.3-5.1.5.2.1"><strong>Shared Client for all Tenants</strong>: Multiple RP tenants share a single <code>client_id</code> registered with the OP.<a href="#appendix-A.3-5.1.5.2.1" class="pilcrow">¶</a></p>
 <ul class="compact normal">
 <li class="compact normal" id="appendix-A.3-5.1.5.2.2.1">
-                    <strong>Registration</strong>: All RP tenants share a single <code>client_id</code> registered with the OP. The RP MAY register the <code>tenants</code> client registration parameter (see Section "Client Registration Parameters") as a JSON array of strings containing the RP tenant identifiers.<a href="#appendix-A.3-5.1.5.2.2.1" class="pilcrow">¶</a>
+                    <strong>Registration</strong>: All RP tenants share a single <code>client_id</code> registered with the OP. The RP MAY register the <code>tenants</code> client registration parameter (see <a href="#client-registration-parameters">Section "Client Registration Parameters"</a>) as a JSON array of strings containing the RP tenant identifiers.<a href="#appendix-A.3-5.1.5.2.2.1" class="pilcrow">¶</a>
 </li>
                   <li class="compact normal" id="appendix-A.3-5.1.5.2.2.2">
                     <strong>Account Identifier Uniqueness</strong>: When both <code>aud_tenant</code> and <code>aud_sub</code> are present, their combination MUST be unique for a given <code>aud</code> (client identifier) within the RP. This ensures that account identifiers are unambiguous within the context of the RP, even when the same <code>aud_sub</code> value might exist in different RP tenants.<a href="#appendix-A.3-5.1.5.2.2.2" class="pilcrow">¶</a>
@@ -2204,8 +2231,8 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
 </li>
         </ul>
 <p id="appendix-A.3-6">The following table summarizes RP tenancy models:<a href="#appendix-A.3-6" class="pilcrow">¶</a></p>
-<table class="center" id="table-2">
-          <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<table class="center" id="table-3">
+          <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
 <thead>
             <tr>
               <th class="text-left" rowspan="1" colspan="1">Model</th>
@@ -2239,7 +2266,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
                 <code>aud_tenant</code> + <code>aud_sub</code> unique within <code>aud</code>
 </td>
               <td class="text-left" rowspan="1" colspan="1">
-                <code>aud</code> + <code>aud_tenant</code> claim in ID Token (see Section "ID Token Claims")</td>
+                <code>aud</code> + <code>aud_tenant</code> claim in ID Token (see <a href="#id-token-claims">Section "ID Token Claims"</a>)</td>
             </tr>
           </tbody>
         </table>
@@ -2255,11 +2282,11 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
         <h3 id="name-rp-tenant-communication">
 <a href="#appendix-A.4" class="section-number selfRef">A.4. </a><a href="#name-rp-tenant-communication" class="section-name selfRef">RP Tenant Communication</a>
         </h3>
-<p id="appendix-A.4-1">When an RP is multi-tenant and uses a shared <code>client_id</code>, the RP MAY communicate its tenant identifier to the OP, but is not required to do so. If the OP knows the RP tenant identifier, it SHOULD include it in the <code>aud_tenant</code> claim of the ID Token (see Section "ID Token Claims").<a href="#appendix-A.4-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.4-1">When an RP is multi-tenant and uses a shared <code>client_id</code>, the RP MAY communicate its tenant identifier to the OP, but is not required to do so. If the OP knows the RP tenant identifier, it SHOULD include it in the <code>aud_tenant</code> claim of the ID Token (see <a href="#id-token-claims">Section "ID Token Claims"</a>).<a href="#appendix-A.4-1" class="pilcrow">¶</a></p>
 <p id="appendix-A.4-2">The RP can communicate its tenant identifier using one of the following mechanisms:<a href="#appendix-A.4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-A.4-3.1">
-            <p id="appendix-A.4-3.1.1"><strong><code>client_tenant</code> authentication request parameter</strong> (RECOMMENDED): The RP includes the <code>client_tenant</code> parameter in the authentication request with its tenant identifier value. This is explicit and unambiguous, allowing the OP to include the <code>aud_tenant</code> claim in the ID Token and apply RP tenant-specific policies (e.g., access control, consent requirements, authentication methods). When present, the OP MUST echo this value back in the <code>aud_tenant</code> claim. See Section "Authentication Request Parameters" for details.<a href="#appendix-A.4-3.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-A.4-3.1.1"><strong><code>client_tenant</code> authentication request parameter</strong> (RECOMMENDED): The RP includes the <code>client_tenant</code> parameter in the authentication request with its tenant identifier value. This is explicit and unambiguous, allowing the OP to include the <code>aud_tenant</code> claim in the ID Token and apply RP tenant-specific policies (e.g., access control, consent requirements, authentication methods). When present, the OP MUST echo this value back in the <code>aud_tenant</code> claim. See <a href="#authentication-request-parameters">Section "Authentication Request Parameters"</a> for details.<a href="#appendix-A.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-A.4-3.2">
             <p id="appendix-A.4-3.2.1"><strong><code>state</code> parameter or session context</strong>: RPs may include tenant identification information in the opaque <code>state</code> parameter of the OpenID Connect Authentication Request, or maintain tenant context via cookies or other session mechanisms. When the RP uses only this mechanism, the OP does not have access to the tenant identifier and MUST omit the <code>aud_tenant</code> claim from the ID Token. The OP cannot apply RP tenant-specific policies, and the RP MUST use implementation-specific mechanisms (such as parsing the <code>state</code> parameter or session context) to determine the tenant for routing the authentication response. This pattern is commonly used in practice.<a href="#appendix-A.4-3.2.1" class="pilcrow">¶</a></p>

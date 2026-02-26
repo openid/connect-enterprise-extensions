@@ -128,7 +128,7 @@ When the `aud_tenant` claim is present, the `aud_sub` claim represents the accou
 
 ## aud_tenant
 
-The `aud_tenant` claim is a JSON string that represents an RP tenant identifier. This claim is OPTIONAL and is only included when the RP is multi-tenant and the OP knows the RP tenant identifier (see Appendix A for how the RP communicates its tenant identifier to the OP).
+The `aud_tenant` claim is a JSON string that represents an RP tenant identifier. This claim is OPTIONAL and is only included when the RP is multi-tenant and the OP knows the RP tenant identifier (see [Appendix A](#enterprise-tenancy-models) for how the RP communicates its tenant identifier to the OP).
 
 When the RP provides the `client_tenant` authentication request parameter, the `aud_tenant` claim value MUST be the same value that the RP provided in that parameter. When the OP determines the RP tenant identifier through other means (e.g., `domain_hint`, `login_hint`, default tenant selection, or end-user selection), the `aud_tenant` claim value MUST be a valid RP tenant identifier for the client. The value is opaque to the OP (the OP does not need to understand its semantic meaning). The value MUST be a stable identifier that is unique within the context of the `client_id` used in the authentication request, ensuring that when multiple RP tenants share the same `client_id`, each tenant can be uniquely identified.
 
@@ -148,7 +148,7 @@ The `domain_hint` parameter provides a hint for the OP to determine which OP ten
 
 The `tenant` parameter is the explicit OP tenant identifier value that corresponds to the `tenant` claim the RP would like included in the ID Token. This parameter takes precedence over `domain_hint` when both are present. 
 
-The `tenant` parameter value MUST be one of the allowed values for the OP model as specified in the table in Section "tenant":
+The `tenant` parameter value MUST be one of the allowed values for the OP model as specified in the table in [Section "tenant"](#tenant):
 
 - The value `personal` to indicate the RP would like the user to use a personal account (valid for all OP models)
 - The value `organization` to indicate the RP would like the user to use an organizational account (valid for single-tenant OPs and multi-tenant OPs using tenant-specific issuers only)
@@ -158,7 +158,7 @@ If the `tenant` parameter value does not match any OP tenant, the OP SHOULD retu
 
 ## client_tenant
 
-The `client_tenant` parameter is an OPTIONAL parameter that the RP includes to communicate its RP tenant identifier to the OP. This parameter is used when the RP is multi-tenant and uses a shared `client_id` across multiple RP tenants (see Appendix A for details on multi-tenant RP models).
+The `client_tenant` parameter is an OPTIONAL parameter that the RP includes to communicate its RP tenant identifier to the OP. This parameter is used when the RP is multi-tenant and uses a shared `client_id` across multiple RP tenants (see [Appendix A](#enterprise-tenancy-models) for details on multi-tenant RP models).
 
 The client MAY register allowed tenants using the `tenants` client registration parameter. When the `client_tenant` authentication request parameter is provided, the OP SHOULD validate that the `client_tenant` value corresponds to a valid RP tenant identifier that was registered for this client.
 
@@ -232,11 +232,11 @@ The `client_tenant` value to be included in the Authentication Request.
 
 ### Tenant Isolation
 
-OPs MUST ensure strict isolation between tenants. An authenticated user from one OP tenant MUST NOT be able to obtain tokens containing a different tenant's identifier. The OP MUST validate that the `tenant` claim (see Section "ID Token Claims") in issued ID Tokens accurately reflects the tenant context in which the user authenticated.
+OPs MUST ensure strict isolation between tenants. An authenticated user from one OP tenant MUST NOT be able to obtain tokens containing a different tenant's identifier. The OP MUST validate that the `tenant` claim (see [Section "ID Token Claims"](#id-token-claims)) in issued ID Tokens accurately reflects the tenant context in which the user authenticated.
 
 ### Client Tenant Validation
 
-When the OP receives a `client_tenant` authentication request parameter (see Section "Authentication Request Parameters"), the OP SHOULD validate that the value corresponds to a registered RP tenant identifier for the given `client_id`. If the OP has registered the `tenants` client registration parameter (see Section "Client Registration Parameters") for the client, the OP SHOULD reject requests where `client_tenant` is not in the registered list.
+When the OP receives a `client_tenant` authentication request parameter (see [Section "Authentication Request Parameters"](#authentication-request-parameters)), the OP SHOULD validate that the value corresponds to a registered RP tenant identifier for the given `client_id`. If the OP has registered the `tenants` client registration parameter (see [Section "Client Registration Parameters"](#client-registration-parameters)) for the client, the OP SHOULD reject requests where `client_tenant` is not in the registered list.
 
 Failure to validate the `client_tenant` parameter could allow an attacker to request tokens for arbitrary RP tenants, potentially bypassing RP tenant-specific policies configured at the OP.
 
@@ -244,9 +244,9 @@ Failure to validate the `client_tenant` parameter could allow an attacker to req
 
 Multi-tenant OPs MUST ensure that subject identifiers are unambiguous across tenants to prevent account confusion where an RP incorrectly links accounts from different OP tenants.
 
-For multi-tenant OPs using a single issuer (see Appendix A), the OP MUST ensure that subject identifiers are unambiguous across tenants. If the same `sub` value could exist in multiple OP tenants, the OP MUST include the `tenant` claim (see Section "ID Token Claims") in the ID Token to enable RPs to correctly identify the account. The combination of `iss` + `tenant` + `sub` (for public subject identifiers) or `iss` + `tenant` + `client_id` + `sub` (for pairwise subject identifiers) MUST be unique across all tenants (see Appendix A for detailed requirements).
+For multi-tenant OPs using a single issuer (see [Appendix A](#enterprise-tenancy-models)), the OP MUST ensure that subject identifiers are unambiguous across tenants. If the same `sub` value could exist in multiple OP tenants, the OP MUST include the `tenant` claim (see [Section "ID Token Claims"](#id-token-claims)) in the ID Token to enable RPs to correctly identify the account. The combination of `iss` + `tenant` + `sub` (for public subject identifiers) or `iss` + `tenant` + `client_id` + `sub` (for pairwise subject identifiers) MUST be unique across all tenants (see [Appendix A](#enterprise-tenancy-models) for detailed requirements).
 
-For multi-tenant OPs using tenant-specific issuer identifiers (see Appendix A), the OP MUST ensure that the combination of `iss` + `sub` (for public subject identifiers) or `iss` + `client_id` + `sub` (for pairwise subject identifiers) is unique across all tenants. Since each tenant has a different issuer identifier, the OIDC Core requirement that `sub` is unique within `iss` already ensures tenant isolation. However, the OP MUST ensure uniqueness across all tenants, regardless of whether a client is shared across tenants or unique per tenant (see Appendix A for detailed requirements).
+For multi-tenant OPs using tenant-specific issuer identifiers (see [Appendix A](#enterprise-tenancy-models)), the OP MUST ensure that the combination of `iss` + `sub` (for public subject identifiers) or `iss` + `client_id` + `sub` (for pairwise subject identifiers) is unique across all tenants. Since each tenant has a different issuer identifier, the OIDC Core requirement that `sub` is unique within `iss` already ensures tenant isolation. However, the OP MUST ensure uniqueness across all tenants, regardless of whether a client is shared across tenants or unique per tenant (see [Appendix A](#enterprise-tenancy-models) for detailed requirements).
 
 ### Token Injection Prevention
 
@@ -256,7 +256,7 @@ OPs SHOULD implement measures to prevent token injection attacks where an attack
 
 ### Tenant Claim Validation
 
-When an RP expects to receive the `tenant` claim (see Section "ID Token Claims") (e.g., when authenticating to a multi-tenant OP using a single issuer, as described in Appendix A), the RP MUST validate that the `tenant` claim is present in the ID Token. If the RP has prior knowledge of the expected tenant (e.g., from a previous authentication or configuration), the RP SHOULD validate that the received `tenant` claim matches the expected value.
+When an RP expects to receive the `tenant` claim (see [Section "ID Token Claims"](#id-token-claims)) (e.g., when authenticating to a multi-tenant OP using a single issuer, as described in [Appendix A](#enterprise-tenancy-models)), the RP MUST validate that the `tenant` claim is present in the ID Token. If the RP has prior knowledge of the expected tenant (e.g., from a previous authentication or configuration), the RP SHOULD validate that the received `tenant` claim matches the expected value.
 
 Failure to validate the `tenant` claim could result in:
 - Account confusion where users from different OP tenants are incorrectly linked
@@ -264,16 +264,16 @@ Failure to validate the `tenant` claim could result in:
 
 ### aud_tenant Claim Validation
 
-When an RP sends the `client_tenant` authentication request parameter (see Section "Authentication Request Parameters"), the RP MUST validate that the returned `aud_tenant` claim (see Section "ID Token Claims") matches the value sent in the request. If the `aud_tenant` claim is missing or contains a different value, the RP MUST reject the ID Token.
+When an RP sends the `client_tenant` authentication request parameter (see [Section "Authentication Request Parameters"](#authentication-request-parameters)), the RP MUST validate that the returned `aud_tenant` claim (see [Section "ID Token Claims"](#id-token-claims)) matches the value sent in the request. If the `aud_tenant` claim is missing or contains a different value, the RP MUST reject the ID Token.
 
-This validation prevents an attacker from obtaining a token intended for one RP tenant and using it to authenticate to a different RP tenant. See Appendix A for details on how the `client_tenant` parameter relates to the `aud_tenant` claim.
+This validation prevents an attacker from obtaining a token intended for one RP tenant and using it to authenticate to a different RP tenant. See [Appendix A](#enterprise-tenancy-models) for details on how the `client_tenant` parameter relates to the `aud_tenant` claim.
 
 ### Account Identifier Uniqueness
 
 RPs MUST use the complete set of identifying claims when linking accounts:
-- For multi-tenant OPs using a single issuer (see Appendix A): `iss` + `tenant` (see Section "ID Token Claims") + `sub`
-- For multi-tenant OPs using tenant-specific issuers (see Appendix A): `iss` + `sub`
-- For multi-tenant RPs with shared `client_id` (see Appendix A): `aud` + `aud_tenant` (see Section "ID Token Claims") + `aud_sub` (see Section "ID Token Claims") (when present)
+- For multi-tenant OPs using a single issuer (see [Appendix A](#enterprise-tenancy-models)): `iss` + `tenant` (see [Section "ID Token Claims"](#id-token-claims)) + `sub`
+- For multi-tenant OPs using tenant-specific issuers (see [Appendix A](#enterprise-tenancy-models)): `iss` + `sub`
+- For multi-tenant RPs with shared `client_id` (see [Appendix A](#enterprise-tenancy-models)): `aud` + `aud_tenant` (see [Section "ID Token Claims"](#id-token-claims)) + `aud_sub` (see [Section "ID Token Claims"](#id-token-claims)) (when present)
 
 Using only a subset of these claims (e.g., only `sub`) could result in incorrectly linking accounts from different tenants.
 
@@ -371,7 +371,7 @@ An OP can have a single-tenant issuer or a multi-tenant issuer:
   ```
 
 - **Multi-tenant OP**: The OP has multiple tenants. Multi-tenant OPs may use a single issuer identifier for all tenants, or tenant-specific issuer identifiers:
-  - **Single issuer for all tenants**: The OP uses one issuer identifier for all tenants, and the `tenant` claim (see Section "ID Token Claims") distinguishes between tenants.
+  - **Single issuer for all tenants**: The OP uses one issuer identifier for all tenants, and the `tenant` claim (see [Section "ID Token Claims"](#id-token-claims)) distinguishes between tenants.
 
     - **Issuer Configuration**: All tenants share the same issuer identifier (`iss`), OP metadata endpoint, and signing keys.
 
@@ -432,10 +432,10 @@ The following table summarizes OP tenancy models:
 | Model | Issuer Configuration | Uniqueness Requirement | Tenant Identification |
 |-------|---------------------|------------------------|---------------------|
 | Single-tenant OP | Single `iss`, single metadata endpoint, single signing keys | `public`: `sub` unique within `iss`<br/>`pairwise`: `iss` + `client_id` + `sub` unique | Not applicable |
-| Multi-tenant OP (single issuer) | Single `iss` shared across tenants, single metadata endpoint, single signing keys | `public`: `iss` + `tenant` + `sub` unique<br/>`pairwise`: `iss` + `tenant` + `client_id` + `sub` unique | `tenant` claim in ID Token (see Section "ID Token Claims") |
+| Multi-tenant OP (single issuer) | Single `iss` shared across tenants, single metadata endpoint, single signing keys | `public`: `iss` + `tenant` + `sub` unique<br/>`pairwise`: `iss` + `tenant` + `client_id` + `sub` unique | `tenant` claim in ID Token (see [Section "ID Token Claims"](#id-token-claims)) |
 | Multi-tenant OP (tenant-specific issuers) | Each tenant has own `iss`, metadata endpoint, and signing keys | `public`: `iss` + `sub` unique (per tenant)<br/>`pairwise`: `iss` + `client_id` + `sub` unique (per tenant) | `iss` value identifies tenant |
 
-- **Discovery**: If an OP publishes support for the `tenant` claim in the `claims_supported` metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the `tenant` claim to be present in ID Tokens. The `tenant` claim value MUST be one of the allowed values for the corresponding OP model as specified in the table in Section "tenant".
+- **Discovery**: If an OP publishes support for the `tenant` claim in the `claims_supported` metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the `tenant` claim to be present in ID Tokens. The `tenant` claim value MUST be one of the allowed values for the corresponding OP model as specified in the table in [Section "tenant"](#tenant).
 
 ## OP Tenant Communication
 
@@ -443,9 +443,9 @@ When the OP uses tenant-specific issuer identifiers, the RP authenticates to the
 
 The following applies only to multi-tenant OPs that use a single issuer for all tenants. For such OPs, the RP MAY specify which OP tenant it wants the user to authenticate to using one of the following mechanisms:
 
-- **`tenant` parameter**: The RP includes the `tenant` parameter in the authentication request with the OP tenant identifier value (e.g., `tenant=acme-corp`). When the OP receives this parameter, it SHOULD include the `tenant` claim in the ID Token with the same value. This is RECOMMENDED for RPs that know which `tenant` to make an authentication request to. See Section "Authentication Request Parameters" for details.
+- **`tenant` parameter**: The RP includes the `tenant` parameter in the authentication request with the OP tenant identifier value (e.g., `tenant=acme-corp`). When the OP receives this parameter, it SHOULD include the `tenant` claim in the ID Token with the same value. This is RECOMMENDED for RPs that know which `tenant` to make an authentication request to. See [Section "Authentication Request Parameters"](#authentication-request-parameters) for details.
 
-- **`domain_hint` parameter**: The RP includes the `domain_hint` parameter with a domain name or email domain (e.g., `example.com`) that helps the OP identify the appropriate tenant. This is a user experience hint and is not guaranteed to uniquely identify a tenant. When both `tenant` and `domain_hint` are present, the `tenant` parameter takes precedence. If the OP cannot uniquely identify the tenant from `domain_hint` alone, the OP's tenant selection behavior is implementation-dependent. See Section "Authentication Request Parameters" for details.
+- **`domain_hint` parameter**: The RP includes the `domain_hint` parameter with a domain name or email domain (e.g., `example.com`) that helps the OP identify the appropriate tenant. This is a user experience hint and is not guaranteed to uniquely identify a tenant. When both `tenant` and `domain_hint` are present, the `tenant` parameter takes precedence. If the OP cannot uniquely identify the tenant from `domain_hint` alone, the OP's tenant selection behavior is implementation-dependent. See [Section "Authentication Request Parameters"](#authentication-request-parameters) for details.
 
 When the OP tenant is not specified by the RP (neither `tenant` nor `domain_hint` is provided, or `domain_hint` does not uniquely identify a tenant), the OP MAY:
 - Provide a selector to allow the end-user to pick the tenant during authentication
@@ -538,7 +538,7 @@ An RP can be single-tenant or multi-tenant:
       ```
 
   - **Shared Client for all Tenants**: Multiple RP tenants share a single `client_id` registered with the OP.
-    - **Registration**: All RP tenants share a single `client_id` registered with the OP. The RP MAY register the `tenants` client registration parameter (see Section "Client Registration Parameters") as a JSON array of strings containing the RP tenant identifiers.
+    - **Registration**: All RP tenants share a single `client_id` registered with the OP. The RP MAY register the `tenants` client registration parameter (see [Section "Client Registration Parameters"](#client-registration-parameters)) as a JSON array of strings containing the RP tenant identifiers.
     - **Account Identifier Uniqueness**: When both `aud_tenant` and `aud_sub` are present, their combination MUST be unique for a given `aud` (client identifier) within the RP. This ensures that account identifiers are unambiguous within the context of the RP, even when the same `aud_sub` value might exist in different RP tenants.
 
     For example:
@@ -569,17 +569,17 @@ The following table summarizes RP tenancy models:
 |-------|--------------|------------------------------|----------------------|
 | Single-tenant RP | Single `client_id` registered with OP issuer | `aud_sub` unique within `client_id` | Not applicable |
 | Multi-tenant RP (unique client per tenant) | Each tenant has own `client_id` registered with OP issuer | `aud_sub` unique within `client_id` | `aud` identifies tenant |
-| Multi-tenant RP (shared client) | Single `client_id` shared across tenants, `tenants` parameter MAY be registered | `aud_tenant` + `aud_sub` unique within `aud` | `aud` + `aud_tenant` claim in ID Token (see Section "ID Token Claims") |
+| Multi-tenant RP (shared client) | Single `client_id` shared across tenants, `tenants` parameter MAY be registered | `aud_tenant` + `aud_sub` unique within `aud` | `aud` + `aud_tenant` claim in ID Token (see [Section "ID Token Claims"](#id-token-claims)) |
 
 - **Discovery**: If an RP supports multiple tenants and registers the `tenants` client registration parameter for the client, then OPs SHOULD assume the RP is multi-tenant.
 
 ## RP Tenant Communication
 
-When an RP is multi-tenant and uses a shared `client_id`, the RP MAY communicate its tenant identifier to the OP, but is not required to do so. If the OP knows the RP tenant identifier, it SHOULD include it in the `aud_tenant` claim of the ID Token (see Section "ID Token Claims").
+When an RP is multi-tenant and uses a shared `client_id`, the RP MAY communicate its tenant identifier to the OP, but is not required to do so. If the OP knows the RP tenant identifier, it SHOULD include it in the `aud_tenant` claim of the ID Token (see [Section "ID Token Claims"](#id-token-claims)).
 
 The RP can communicate its tenant identifier using one of the following mechanisms:
 
-- **`client_tenant` authentication request parameter** (RECOMMENDED): The RP includes the `client_tenant` parameter in the authentication request with its tenant identifier value. This is explicit and unambiguous, allowing the OP to include the `aud_tenant` claim in the ID Token and apply RP tenant-specific policies (e.g., access control, consent requirements, authentication methods). When present, the OP MUST echo this value back in the `aud_tenant` claim. See Section "Authentication Request Parameters" for details.
+- **`client_tenant` authentication request parameter** (RECOMMENDED): The RP includes the `client_tenant` parameter in the authentication request with its tenant identifier value. This is explicit and unambiguous, allowing the OP to include the `aud_tenant` claim in the ID Token and apply RP tenant-specific policies (e.g., access control, consent requirements, authentication methods). When present, the OP MUST echo this value back in the `aud_tenant` claim. See [Section "Authentication Request Parameters"](#authentication-request-parameters) for details.
 
 - **`state` parameter or session context**: RPs may include tenant identification information in the opaque `state` parameter of the OpenID Connect Authentication Request, or maintain tenant context via cookies or other session mechanisms. When the RP uses only this mechanism, the OP does not have access to the tenant identifier and MUST omit the `aud_tenant` claim from the ID Token. The OP cannot apply RP tenant-specific policies, and the RP MUST use implementation-specific mechanisms (such as parsing the `state` parameter or session context) to determine the tenant for routing the authentication response. This pattern is commonly used in practice.
 

@@ -88,28 +88,35 @@ The `session_expiry` claim is a JSON integer that represents the Unix timestamp 
 
 The `tenant` claim is a JSON string that represents an OP tenant identifier. This claim is OPTIONAL and MAY be included in ID Tokens.
 
-- **Single-tenant OPs**: Single-tenant OPs SHOULD omit the `tenant` claim.
+The following well-known values are defined for the `tenant` claim:
 
-- **Multi-tenant OPs using a single issuer**: Multi-tenant OPs using a single issuer identifier SHOULD include the `tenant` claim to identify the OP tenant. The value MUST be a stable, opaque to the RP, OP unique identifier or a well known special value described below.
+- `personal`: Indicates that accounts are managed by individuals rather than by a specific organizational tenant.
+- `organization`: Indicates that accounts are managed by an organization.
+
+- **Single-tenant OPs**: Single-tenant OPs MAY include the `tenant` claim. If included, the value MUST be `personal` or `organization`.
+
+- **Multi-tenant OPs using a single issuer**: Multi-tenant OPs using a single issuer identifier SHOULD include the `tenant` claim to identify the OP tenant. The value MUST be `personal` or a stable, opaque to the RP, OP unique tenant identifier.
 
   - The combination of `iss`, `tenant`, and `sub` MUST be unique across all OP tenants.
   - If the OP uses `pairwise` subject identifiers, the same user MAY have the same `sub` for the same `client_id` regardless of OP tenant. The `tenant` claim SHOULD be included in the uniqueness requirement (`iss` + `tenant` + `sub`) to disambiguate subjects across tenants.
   - If the OP uses `public` subject identifiers, the `sub` value MUST be the same across all RPs/clients and all OP tenants. The `tenant` claim MUST be included in the uniqueness requirement (`iss` + `tenant` + `sub`) to disambiguate subjects across tenants.
 
-- **Multi-tenant OPs using tenant-specific issuer identifiers**: Multi-tenant OPs using tenant-specific issuer identifiers SHOULD omit the `tenant` claim since the issuer identifier itself identifies the tenant.
+- **Multi-tenant OPs using tenant-specific issuer identifiers**: Multi-tenant OPs using tenant-specific issuer identifiers SHOULD omit the `tenant` claim since the issuer identifier itself identifies the tenant. If the `tenant` claim is included, the value MUST be `personal` or `organization`.
 
   - Each tenant issuer identifier MUST be a valid URL per [OpenID Connect Core 1.0] Section 2.
   - The combination of `iss` and `sub` MUST be unique per tenant.
   - If the OP uses `pairwise` subject identifiers, the `sub` value MUST differ across `client_id` values within each tenant. The combination of `iss` + `client_id` + `sub` MUST be unique across all tenants.
   - If the OP uses `public` subject identifiers, the `sub` value MUST be the same across all RPs/clients within each tenant. The `sub` value MAY be the same across tenants, but the combination of `iss` + `sub` MUST be unique across all tenants.
 
-- **Special values**: The `tenant` claim MAY have the well-known value `personal` or `organization` instead of a unique identifier.
-  - `personal`: Indicates that accounts are managed by individuals rather than by a specific organizational tenant.
-  - `organization`: Indicates that accounts are managed by an organization.
+- **Discovery**: If an OP publishes support for the `tenant` claim in the `claims_supported` metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the `tenant` claim to be present in ID Tokens. The `tenant` claim value MUST be one of the allowed values for the corresponding OP model as specified in the table below.
 
-For multi-tenant OPs using tenant-specific issuer identifiers, if the `tenant` claim is present and does not match the tenant identified by the `iss` value, the RP SHOULD treat this as an error condition.
+The following table summarizes the `tenant` claim rules by OP model:
 
-- **Discovery**: If an OP publishes support for the `tenant` claim in the `claims_supported` metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer supports multiple tenants and SHOULD expect the `tenant` claim to be present in ID Tokens.
+| OP Model | Allowed Values |
+|----------|----------------|
+| Single-tenant | `personal` or `organization` |
+| Multi-tenant (single issuer) | `personal` or unique tenant identifier |
+| Multi-tenant (tenant-specific issuers) | `personal` or `organization` |
 
 ## aud_sub
 
@@ -141,10 +148,11 @@ The `domain_hint` parameter provides a hint for the OP to determine which OP ten
 
 The `tenant` parameter is the explicit OP tenant identifier value that corresponds to the `tenant` claim the RP would like included in the ID Token. This parameter takes precedence over `domain_hint` when both are present. 
 
-The `tenant` parameter value MUST match one of the following:
-- The value `personal` to indicate the RP would like the user to use an account managed by the user (personal account)
-- The value `organization` to indicate the RP would like the user to use an account managed by an organization (organizational account)
-- A stable, opaque OP tenant identifier value for multi-tenant OPs
+The `tenant` parameter value MUST be one of the allowed values for the OP model as specified in the table in Section "tenant":
+
+- The value `personal` to indicate the RP would like the user to use a personal account (valid for all OP models)
+- The value `organization` to indicate the RP would like the user to use an organizational account (valid for single-tenant OPs and multi-tenant OPs using tenant-specific issuers only)
+- A stable, opaque OP tenant identifier (valid for multi-tenant OPs using a single issuer only)
 
 If the `tenant` parameter value does not match any OP tenant, the OP SHOULD return an `invalid_request` error or proceed with the authentication using the OP's default tenant selection logic. The specific behavior is implementation-dependent.
 
@@ -427,7 +435,7 @@ The following table summarizes OP tenancy models:
 | Multi-tenant OP (single issuer) | Single `iss` shared across tenants, single metadata endpoint, single signing keys | `public`: `iss` + `tenant` + `sub` unique<br/>`pairwise`: `iss` + `tenant` + `client_id` + `sub` unique | `tenant` claim in ID Token (see Section "ID Token Claims") |
 | Multi-tenant OP (tenant-specific issuers) | Each tenant has own `iss`, metadata endpoint, and signing keys | `public`: `iss` + `sub` unique (per tenant)<br/>`pairwise`: `iss` + `client_id` + `sub` unique (per tenant) | `iss` value identifies tenant |
 
-- **Discovery**: If an OP publishes support for the `tenant` claim in the `claims_supported` metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer supports multiple tenants and SHOULD expect the `tenant` claim to be present in ID Tokens.
+- **Discovery**: If an OP publishes support for the `tenant` claim in the `claims_supported` metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the `tenant` claim to be present in ID Tokens. The `tenant` claim value MUST be one of the allowed values for the corresponding OP model as specified in the table in Section "tenant".
 
 ## OP Tenant Communication
 

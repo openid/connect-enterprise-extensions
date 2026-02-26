@@ -761,6 +761,7 @@ specification.</t>
 <t>-02</t>
 
 <ul spacing="compact">
+<li>updated <tt>tenant</tt> claim rules</li>
 <li>added <tt>aud_tenant</tt> claim</li>
 <li>added <tt>client_tenant</tt> authentication request parameter</li>
 <li>added <tt>tenants</tt> client registration parameter</li>

@@ -686,6 +686,7 @@ specification.
 
    -02
 
+   * updated `tenant` claim rules
    * added `aud_tenant` claim
    * added `client_tenant` authentication request parameter
    * added `tenants` client registration parameter

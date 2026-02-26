@@ -467,7 +467,7 @@ the use of <em>this fixed-width font</em>.</t>
 </tbody>
 </table>
 <ul spacing="compact">
-<li><strong>Discovery</strong>: If an OP publishes support for the <tt>tenant</tt> claim in the <tt>claims_supported</tt> metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the <tt>tenant</tt> claim to be present in ID Tokens. The <tt>tenant</tt> claim value MUST be one of the allowed values for the corresponding OP model as specified in the table in <eref target="#tenant">Section "tenant"</eref>.</li>
+<li><strong>Discovery</strong>: If an OP publishes support for the <tt>tenant</tt> claim in the <tt>claims_supported</tt> metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the <tt>tenant</tt> claim to be present in ID Tokens with a value of <tt>personal</tt> or a unique tenant identifier, as specified in <eref target="#tenant">Section "tenant"</eref>.</li>
 </ul>
 </section>
 

@@ -435,7 +435,7 @@ The following table summarizes OP tenancy models:
 | Multi-tenant OP (single issuer) | Single `iss` shared across tenants, single metadata endpoint, single signing keys | `public`: `iss` + `tenant` + `sub` unique<br/>`pairwise`: `iss` + `tenant` + `client_id` + `sub` unique | `tenant` claim in ID Token (see [Section "ID Token Claims"](#id-token-claims)) |
 | Multi-tenant OP (tenant-specific issuers) | Each tenant has own `iss`, metadata endpoint, and signing keys | `public`: `iss` + `sub` unique (per tenant)<br/>`pairwise`: `iss` + `client_id` + `sub` unique (per tenant) | `iss` value identifies tenant |
 
-- **Discovery**: If an OP publishes support for the `tenant` claim in the `claims_supported` metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the `tenant` claim to be present in ID Tokens. The `tenant` claim value MUST be one of the allowed values for the corresponding OP model as specified in the table in [Section "tenant"](#tenant).
+- **Discovery**: If an OP publishes support for the `tenant` claim in the `claims_supported` metadata parameter (see [OpenID Connect Discovery 1.0]), then RPs SHOULD assume that the issuer is a multi-tenant OP using a single issuer identifier and SHOULD expect the `tenant` claim to be present in ID Tokens with a value of `personal` or a unique tenant identifier, as specified in [Section "tenant"](#tenant).
 
 ## OP Tenant Communication
 
